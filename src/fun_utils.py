@@ -2,6 +2,7 @@ from pandas import read_csv
 import numpy as np
 
 
+
 def load_data(filename):
     """
     Load data from a csv file
@@ -44,4 +45,17 @@ def split_data(x, y, tr_fraction=0.5):
         yts: labels (numpy array, test set)
 
     """
-    pass
+    num_samples = y.size
+    num_tr = int(tr_fraction * num_samples)
+    num_ts = num_samples - num_tr
+    tr_idx = np.zeros(shape=(num_samples,))
+    tr_idx[0:num_tr] = 1
+
+    np.random.shuffle(tr_idx)
+    ytr = y[tr_idx == 1]
+    xtr = x[tr_idx == 1, :]
+
+    yts = y[tr_idx == 0]
+    xts = x[tr_idx == 0, :]
+
+    return xtr, ytr, xts, yts
